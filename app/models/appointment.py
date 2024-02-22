@@ -10,4 +10,4 @@ class Appointment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     def __repr__(self):
-        return f'<Appointment {self.title} on {self.date} at {self.time}>'
+        return f'<Appointment {self.description} on {self.date} at {self.time} by User: {self.user_id}>'

@@ -12,7 +12,7 @@ class User(db.Model):
     appointments = db.relationship('Appointment', backref='user', lazy=True)
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'<User: {self.username}> Id: {self.id}'
 
     def set_password(self, password):
         # Hash the password before storing it in the database
