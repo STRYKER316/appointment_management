@@ -13,8 +13,9 @@ def get_appointments():
     appointment_list = [
         {
             'id': appointment.id,
-            'title': appointment.title,
             'date': appointment.date.strftime('%Y-%m-%d'),
+            'time': appointment.time.strftime('%H:%M'),
+            'description': appointment.description,
             'user_id': appointment.user_id
         }
         for appointment in appointments
@@ -26,10 +27,10 @@ def get_appointments():
 @appointments_bp.route('/appointments', methods=['POST'])
 def create_appointment():
     data = request.get_json()
-
-    description = data.get('description')
+    
     date_str = data.get('date')
     time_str = data.get('time')
+    description = data.get('description')
     user_id = data.get('user_id')
 
     if not all([date_str, time_str, user_id]):
@@ -41,7 +42,7 @@ def create_appointment():
     except ValueError:
         return jsonify({'error': 'Invalid date format'}), 400
 
-    new_appointment = Appointment(description=description, date=date, time=time ,user_id=user_id)
+    new_appointment = Appointment(date=date, time=time, description=description, user_id=user_id)
     db.session.add(new_appointment)
     db.session.commit()
 
