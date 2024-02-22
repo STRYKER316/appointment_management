@@ -1,6 +1,5 @@
 from app import app, db
 
-# ------------ For executing 'python run.py' ------------
 # Create an application context
 with app.app_context():
     # Initialize the database
