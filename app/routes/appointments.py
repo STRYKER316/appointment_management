@@ -49,7 +49,7 @@ def create_appointment():
     return jsonify({'message': 'Appointment created successfully'})
 
 
-# Get a single appointment
+# Get details of a single appointment
 @appointments_bp.route('/appointments/<int:appointment_id>', methods=['GET'])
 def get_appointment(appointment_id):
     appointment = Appointment.query.get(appointment_id)
@@ -122,13 +122,29 @@ def delete_appointment(appointment_id):
     return jsonify({'message': 'Appointment deleted successfully'})
 
 
-# # Availability of user on selected date
-# @app.route('/availability', methods=['GET'])
-# def check_availability():
-#     user_id = request.args.get('user_id')
-#     date = request.args.get('date')
+# Availability of user on a selected date
+@appointments_bp.route('/availability', methods=['GET'])
+def check_availability():
+    # data = request.get_json()
+    data = request.args
 
-#     for appointment in appointments:
-#         if appointment['user_id'] == user_id and appointment['date'] == date:
-#             return jsonify({'message': 'User not available on selected date'})
-#     return jsonify({'message': 'User available on selected date'})
+    user_id = data.get('user_id')
+    date_str = data.get('date')
+
+    print(user_id, date_str)
+
+    if not all([user_id, date_str]):
+        return jsonify({'error': 'Missing required data'}), 400
+
+    try:
+        selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    except ValueError:
+        return jsonify({'error': 'Invalid date format'}), 400
+
+    # Check if the user has any appointments on the selected date
+    user_appointments = Appointment.query.filter_by(user_id=user_id, date=selected_date).all()
+
+    if user_appointments:
+        return jsonify({'message': 'User is not available on the selected date'})
+    else:
+        return jsonify({'message': 'User is available on the selected date'})
