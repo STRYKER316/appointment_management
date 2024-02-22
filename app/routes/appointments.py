@@ -119,3 +119,15 @@ def delete_appointment(appointment_id):
     db.session.commit()
 
     return jsonify({'message': 'Appointment deleted successfully'})
+
+
+# # Availability of user on selected date
+# @app.route('/availability', methods=['GET'])
+# def check_availability():
+#     user_id = request.args.get('user_id')
+#     date = request.args.get('date')
+
+#     for appointment in appointments:
+#         if appointment['user_id'] == user_id and appointment['date'] == date:
+#             return jsonify({'message': 'User not available on selected date'})
+#     return jsonify({'message': 'User available on selected date'})
